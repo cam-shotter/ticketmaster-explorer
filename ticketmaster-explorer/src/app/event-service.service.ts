@@ -18,11 +18,10 @@ export class EventService {
     params = params.append('apikey', this.apiKey);
     params = params.append('keyword', keyword);
     params = params.append('latlong', location);
-    params = params.append('startDateTime', startDatetime.toISOString());
-    params = params.append('endDateTime', endDatetime.toISOString());
+    params = params.append('startDateTime', startDatetime.toISOString().slice(0, -5) + 'Z');
+    params = params.append('endDateTime', endDatetime.toISOString().slice(0, -5) + 'Z');
     params = params.append('size', size);
     params = params.append('page', page);
-    console.table(params);
     
     return this.http.get<any>(this.apiUrl, { params });
   }
