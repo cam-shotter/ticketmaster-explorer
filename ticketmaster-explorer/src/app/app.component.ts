@@ -1,5 +1,5 @@
-import { Time } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { EventService } from './event-service.service';
 
 interface EventDateTime {
   start: Date;
@@ -23,30 +23,19 @@ interface Event extends EventDetails {
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   title = 'ticketmaster-explorer';
-  events: Event[] = [
-    {
-      id: 1,
-      name: 'Event 1',
-      eventDateTimes: [{
-        start: new Date('2021-01-01 10:00'),
-        end: new Date('2021-01-01 12:00'),
-      }],
-      prices: [10],
-      venues: ['Venue 1'],
-      locations: ['Location 1'],
-    },
-    {
-      id: 2,
-      name: 'Event 2',
-      eventDateTimes: [{
-        start: new Date('2021-01-02 10:00'),
-        end: new Date('2021-01-02 12:00'),
-      }],
-      prices: [20],
-      venues: ['Venue 2'],
-      locations: ['Location 2'],
-    }
-  ]
+
+  events: any[] | undefined;
+
+  constructor(private readonly eventService: EventService) {
+
+  }
+
+  ngOnInit() {
+    this.eventService.getEvents()
+      .subscribe(response => {
+        this.events = response._embedded.events;
+      });
+  }
 }
