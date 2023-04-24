@@ -6,9 +6,10 @@ import { AppComponent } from './app.component';
 
 import { MaterialModule } from './material.module';
 import { GridLayoutComponent } from './shared/components/grid-layout/grid-layout.component';
+import { SearchBarComponent } from './components/search-bar/search-bar.component';
 
 @NgModule({
-  declarations: [AppComponent, GridLayoutComponent],
+  declarations: [AppComponent, GridLayoutComponent, SearchBarComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
