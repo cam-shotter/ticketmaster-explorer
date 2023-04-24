@@ -1,4 +1,4 @@
-export interface Event {
+export interface TicketmasterEvent {
   name: string,
   type: string,
   id: string,
@@ -31,7 +31,7 @@ export interface Page {
 
 export interface GetEventResponse {
   _embedded: {
-    events: Event[],
+    events: TicketmasterEvent[],
   },
   page: Page,
   _links: LinkStyle,

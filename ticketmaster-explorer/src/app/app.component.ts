@@ -1,34 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { EventService } from './services/event-service.service';
-
-interface EventDateTime {
-  start: Date;
-  end: Date;
-  format?: string; // Todo create enum of accepted DateTime formats
-}
-
-interface EventDetails {
-  eventDateTimes: EventDateTime[];
-  prices: number[];
-  venues: string[];
-  locations: string[];
-}
-interface Event extends EventDetails {
-  id: number;
-  name: string;
-}
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'ticketmaster-explorer-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   title = 'ticketmaster-explorer';
 
+  // This should be a TicketMasterEvent interface but don't have the time to property type it out this time
   events: any[] | undefined;
+  subscription: Subscription;
 
-  constructor(private readonly eventService: EventService) {}
+  constructor(private readonly eventService: EventService) {
+    this.subscription = this.eventService.getEventsSubject().subscribe(events => {
+      this.events = events;
+    });
+  }
 
   ngOnInit() {
     const keyword = 'music';
@@ -39,5 +29,9 @@ export class AppComponent implements OnInit {
       .subscribe(response => {
         this.events = response._embedded.events;
       });
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 }

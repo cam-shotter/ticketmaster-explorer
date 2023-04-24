@@ -1,1 +1,20 @@
-<p>search-bar works!</p>
+<form>
+  <mat-form-field appearance="fill">
+    <mat-label>Keyword</mat-label>
+    <input matInput type="text" placeholder="Search events" [formControl]="searchControl">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Location (LatLong)</mat-label>
+    <input matInput type="text" placeholder="Location" [formControl]="locationControl">
+    <mat-hint>e.g. 58.137453, -6.178647</mat-hint>
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>Start Date/Time</mat-label>
+    <input matInput type="datetime-local" placeholder="Start Date/Time" [formControl]="startDateTimeControl">
+  </mat-form-field>
+  <mat-form-field appearance="fill">
+    <mat-label>End Date/Time</mat-label>
+    <input matInput type="datetime-local" placeholder="End Date/Time" [formControl]="endDateTimeControl">
+  </mat-form-field>
+  <button mat-raised-button color="primary" (click)="searchEvents(searchControl.value, locationControl.value, startDateTimeControl.value, endDateTimeControl.value)">Search</button>
+</form>

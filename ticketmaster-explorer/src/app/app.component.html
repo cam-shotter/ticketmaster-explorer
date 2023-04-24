@@ -1,11 +1,13 @@
 <main>
   <section>
-    <h1>{{title}}</h1>
+    <h1>Search Ticketmaster events</h1>
   </section>
   <section>
-    <h2>My Events</h2>
+    <h2>Search</h2>
 
-    <ticketmaster-explorer-grid-layout >
+    <ticketmaster-explorer-search-bar></ticketmaster-explorer-search-bar>
+    
+    <ticketmaster-explorer-grid-layout>
       <ng-container *ngFor="let event of events">
         <mat-card>
           <img mat-card-image src="{{ event.images[0].url }}" alt="{{ event.name }}">
