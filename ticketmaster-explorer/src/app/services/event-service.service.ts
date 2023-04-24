@@ -1,44 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-export interface Event {
-  name: string,
-  type: string,
-  id: string,
-  test: boolean,
-  url: string,
-  locale: string,
-}
-
-export interface Links {
-  self: {
-    href: string
-  },
-  next: {
-    href: string
-  },
-  last: {
-    href: string
-  },
-  first: {
-    href: string
-  }
-}
-
-export interface Page {
-  size: number,
-  totalElements: number,
-  totalPages: number,
-  number: number
-}
-
-export interface GetEventResponse {
-  _embedded: {
-    events: Event[],
-  },
-  page: Page,
-  _links: LinkStyle,
-}
+// I'd usually add ts path aliases to make imports easier to read
+// For example, I'd add the following to the tsconfig.json file:
+// e.g. "@interfaces/*": ["src/app/models/interfaces/*"],
+// But for some reason it wasn't picking up the root path correctly so have left it for now
+import { GetEventResponse } from '../models/interfaces/event-interfaces';
 
 @Injectable({
   providedIn: 'root'
