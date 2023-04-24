@@ -4,14 +4,12 @@
   </section>
   <section>
     <h2>My Events</h2>
-    <ul>
-      <li *ngFor="let event of events">
-        <span>{{event.name}}</span>
-        <span>{{event.eventDateTimes}}</span>
-        <span>{{event.locations}}</span>
-        <span>{{event.prices}}</span>
-      </li>
-    </ul>
+    <tr *ngFor="let event of events">
+      <td>{{ event.name }}</td>
+      <td>{{ event.dates.start.localDate }}</td>
+      <td>{{ event.dates.start.localTime }}</td>
+      <td>{{ event._embedded.venues[0].name }}</td>
+    </tr>
     <mat-card>
       <mat-card-header>
         <mat-card-title>
