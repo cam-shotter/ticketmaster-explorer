@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { EventService } from './event-service.service';
+import { EventService } from './services/event-service.service';
 
 interface EventDateTime {
   start: Date;
