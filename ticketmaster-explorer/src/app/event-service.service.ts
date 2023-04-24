@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -11,7 +11,19 @@ export class EventService {
 
   constructor(private http: HttpClient) {}
 
-  getEvents(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}?classificationName=music&dmaId=324&apikey=${this.apiKey}`);
+  getEvents(keyword: string, location: string, startDatetime: Date, endDatetime: Date): Observable<any> {
+    const size = 1;
+    const page = 1;
+    let params = new HttpParams();
+    params = params.append('apikey', this.apiKey);
+    params = params.append('keyword', keyword);
+    params = params.append('latlong', location);
+    params = params.append('startDateTime', startDatetime.toISOString());
+    params = params.append('endDateTime', endDatetime.toISOString());
+    params = params.append('size', size);
+    params = params.append('page', page);
+    console.table(params);
+    
+    return this.http.get<any>(this.apiUrl, { params });
   }
 }
