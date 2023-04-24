@@ -28,12 +28,14 @@ export class AppComponent implements OnInit {
 
   events: any[] | undefined;
 
-  constructor(private readonly eventService: EventService) {
-
-  }
+  constructor(private readonly eventService: EventService) {}
 
   ngOnInit() {
-    this.eventService.getEvents()
+    const keyword = 'music';
+    const location = '37.7749,-122.4194';
+    const startDatetime = new Date();
+    const endDatetime = new Date(startDatetime.getTime() + 7 * 24 * 60 * 60 * 1000); // 7 days from now
+    this.eventService.getEvents(keyword, location, startDatetime, endDatetime)
       .subscribe(response => {
         this.events = response._embedded.events;
       });
