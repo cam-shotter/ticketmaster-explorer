@@ -4,23 +4,23 @@
   </section>
   <section>
     <h2>My Events</h2>
-    <tr *ngFor="let event of events">
-      <td>{{ event.name }}</td>
-      <td>{{ event.dates.start.localDate }}</td>
-      <td>{{ event.dates.start.localTime }}</td>
-      <td>{{ event._embedded.venues[0].name }}</td>
-    </tr>
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>
-          <h4>Event Name</h4>
-        </mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <p>Event Date</p>
-        <p>Event Location</p>
-        <p>Event Price</p>
-      </mat-card-content>
-    </mat-card>
+
+    <ticketmaster-explorer-grid-layout >
+      <ng-container *ngFor="let event of events">
+        <mat-card>
+          <mat-card-header>
+            <img mat-card-avatar src="{{ event.images[0].url }}" alt="{{ event.name }}">
+            <mat-card-title>
+              <h3>{{ event.name }}</h3>
+            </mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p>{{ event.dates.start.localDate }}</p>
+            <p>{{ event.dates.start.localTime }}</p>
+            <p>{{ event._embedded.venues[0].name }} - <span>{{ event._embedded.venues[0].address.line1 }}</span></p>
+          </mat-card-content>
+        </mat-card>
+      </ng-container>
+    </ticketmaster-explorer-grid-layout>
   </section>
 </main>

@@ -5,11 +5,16 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 
 import { MaterialModule } from './material.module';
-
+import { GridLayoutComponent } from './shared/components/grid-layout/grid-layout.component';
 
 @NgModule({
-  declarations: [AppComponent],
-  imports: [BrowserModule, BrowserAnimationsModule, MaterialModule, HttpClientModule],
+  declarations: [AppComponent, GridLayoutComponent],
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    MaterialModule,
+    HttpClientModule,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })
