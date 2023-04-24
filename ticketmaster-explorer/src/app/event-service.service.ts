@@ -12,7 +12,7 @@ export class EventService {
   constructor(private http: HttpClient) {}
 
   getEvents(keyword: string, location: string, startDatetime: Date, endDatetime: Date): Observable<any> {
-    const size = 1;
+    const size = 10;
     const page = 1;
     let params = new HttpParams();
     params = params.append('apikey', this.apiKey);
