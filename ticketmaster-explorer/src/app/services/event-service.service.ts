@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 // I'd usually add ts path aliases to make imports easier to read
 // For example, I'd add the following to the tsconfig.json file:
 // e.g. "@interfaces/*": ["src/app/models/interfaces/*"],
-// But for some reason it wasn't picking up the root path correctly so have left it for now
+// But for some reason it wasn't picking up the root correctly so have left it for now
 import { GetEventResponse } from '../models/interfaces/event-interfaces';
 
 @Injectable({

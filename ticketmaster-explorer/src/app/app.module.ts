@@ -5,7 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 
 import { MaterialModule } from './material.module';
-import { GridLayoutComponent } from './shared/components/grid-layout/grid-layout.component';
+import { GridLayoutComponent } from './components/grid-layout/grid-layout.component';
 import { SearchBarComponent } from './components/search-bar/search-bar.component';
 
 @NgModule({
