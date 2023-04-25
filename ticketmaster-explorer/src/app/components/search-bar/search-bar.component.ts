@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
-import { FormControl, ValidatorFn } from '@angular/forms';
-import { Observable, startWith, switchMap, map, combineLatest, debounceTime, distinctUntilChanged, Subject } from 'rxjs';
+import { FormControl, Validators } from '@angular/forms';
+import { Observable, Subject } from 'rxjs';
 import { TicketmasterEvent } from 'src/app/models/interfaces/event-interfaces';
 import { latlongValidator } from 'src/app/models/validators/latlong-validator';
 import { EventService } from 'src/app/services/event-service.service';
@@ -16,10 +16,10 @@ export class SearchBarComponent {
 
   // I'd usually set this up using the formbuilder service,
   // and set up a form model in a separate file
-  searchControl: FormControl<string> = new FormControl();
-  locationControl: FormControl<string | null> = new FormControl('', [latlongValidator()]);
-  startDateTimeControl: FormControl<Date> = new FormControl();
-  endDateTimeControl: FormControl<Date> = new FormControl();
+  searchControl: FormControl<string | null> = new FormControl('', Validators.required);
+  locationControl: FormControl<string | null> = new FormControl('', [latlongValidator(), Validators.required]);
+  startDateTimeControl: FormControl<Date | null> = new FormControl(new Date(), Validators.required);
+  endDateTimeControl: FormControl<Date | null> = new FormControl(new Date(), Validators.required);
 
   filteredEvents$: Subject<TicketmasterEvent[]> = new Subject<TicketmasterEvent[]>();
   filteredEvents: Observable<TicketmasterEvent[]> = this.filteredEvents$.asObservable();
@@ -56,12 +56,17 @@ export class SearchBarComponent {
   //   return event && event.name ? event.name : '';
   // }
 
-  searchEvents(searchControl: string, locationControl: string | null, startDateTimeControl: Date, endDateTimeControl: Date) {
+  searchEvents(searchControl: string | null, locationControl: string | null, startDateTimeControl: Date | null, endDateTimeControl: Date | null) {
     const location = locationControl ? locationControl.toString() : '';
-    const startDatetime = new Date(startDateTimeControl);
-    const endDatetime = new Date(endDateTimeControl); 
-    this.eventService.getEvents(searchControl, location, startDatetime, endDatetime).subscribe(response => {
-      this.eventsResponse.emit(response._embedded.events);
+    const startDatetime = startDateTimeControl ? new Date(startDateTimeControl) : new Date();
+    const endDatetime = endDateTimeControl ? new Date(endDateTimeControl): new Date(startDatetime.getTime() + 7 * 24 * 60 * 60 * 1000); 
+    this.eventService.getEvents(searchControl, location, startDatetime, endDatetime).subscribe({
+      next: response => {
+        this.eventsResponse.emit(response._embedded.events);
+      },
+      error: error => {
+        throw(error);
+      }
     });
   }
 }

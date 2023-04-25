@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { EventService } from './services/event-service.service';
-import { Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
+import { GetEventResponse } from './models/interfaces/event-interfaces';
 
 @Component({
   selector: 'ticketmaster-explorer-root',
@@ -11,14 +12,15 @@ export class AppComponent implements OnInit, OnDestroy {
   title = 'ticketmaster-explorer';
 
   // This should be a TicketMasterEvent interface but don't have the time to property type it out this time
-  events: any[] | undefined;
-  subscription: Subscription;
+  // events: TicketmasterEvent[] | undefined;
+  // .subscribe(response => {
+    //   this.events = response;
+    // });
+    
+  constructor(private readonly eventService: EventService) {}
 
-  constructor(private readonly eventService: EventService) {
-    this.subscription = this.eventService.getEventsSubject().subscribe(events => {
-      this.events = events;
-    });
-  }
+  private eventResponseSubject = new Subject<GetEventResponse>();
+  eventResponse$ = this.eventService.getEventsSubject();
 
   ngOnInit() {
     const keyword = 'music';
@@ -26,12 +28,20 @@ export class AppComponent implements OnInit, OnDestroy {
     const startDatetime = new Date();
     const endDatetime = new Date(startDatetime.getTime() + 7 * 24 * 60 * 60 * 1000); // 7 days from now
     this.eventService.getEvents(keyword, location, startDatetime, endDatetime)
-      .subscribe(response => {
-        this.events = response._embedded.events;
+      .subscribe({
+        next: response => {
+          this.eventResponseSubject.next(response);
+        },
+        error: error => {
+          throw(error);
+        }
       });
   }
 
+
+
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    console.log('destroying app component');
+    // this.subscription.unsubscribe();
   }
 }

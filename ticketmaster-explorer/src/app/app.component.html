@@ -1,14 +1,18 @@
 <main>
-  <section>
+  <section role="title">
     <h1>Search Ticketmaster events</h1>
   </section>
-  <section>
-    <h2>Search</h2>
+  
+  <section role="searchbox">
+    <h2>Search events</h2>
 
     <ticketmaster-explorer-search-bar></ticketmaster-explorer-search-bar>
-    
-    <ticketmaster-explorer-grid-layout>
-      <ng-container *ngFor="let event of events">
+  </section>
+
+  <section role="gridcell">
+    <h2>Event results</h2>
+    <ticketmaster-explorer-grid-layout *ngIf="eventResponse$ | async as events">
+      <ng-container *ngFor="let event of events._embedded.events">
         <mat-card>
           <img mat-card-image src="{{ event.images[0].url }}" alt="{{ event.name }}">
           <mat-card-header>
@@ -22,7 +26,7 @@
             <p>{{ event._embedded.venues[0].name }} - <span>{{ event._embedded.venues[0].address.line1 }}</span></p>
           </mat-card-content>
           <mat-card-actions>
-            <button mat-button >Buy Tickets</button>
+            <button mat-stroked-button color="primary">Buy Tickets</button>
           </mat-card-actions>
         </mat-card>
       </ng-container>

@@ -1,0 +1,12 @@
+form {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-gap: 20px;
+  
+  button {
+    height: 56px;
+    @media screen and (max-width: 860px) {
+      grid-column: 1 / -1;
+    } 
+  }
+}

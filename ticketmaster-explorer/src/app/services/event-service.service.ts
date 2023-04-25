@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable, Subject, map } from 'rxjs';
+import { Observable, Subject, catchError, map } from 'rxjs';
 // I'd usually add ts path aliases to make imports easier to read
 // For example, I'd add the following to the tsconfig.json file:
 // e.g. "@interfaces/*": ["src/app/models/interfaces/*"],
 // But for some reason it wasn't picking up the root correctly so have left it for now
-import { GetEventResponse, TicketmasterEvent } from '../models/interfaces/event-interfaces';
+import { GetEventResponse } from '../models/interfaces/event-interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -15,11 +15,11 @@ export class EventService {
   // Usually I'd store this in an environment variable which was set in the build process which would be stored in an environments file
   // Since it's a free API key, I'm just hardcoding it here
   private apiKey = 'Y4QQA57cE1G6zHQ1GOCmycAX2ghM7P9i';
-  private eventsSubject = new Subject<TicketmasterEvent[]>();
+  private eventsSubject = new Subject<GetEventResponse>();
 
   constructor(private http: HttpClient) {}
 
-  getEvents(keyword: string, location: string = '', startDatetime: Date = new Date(), endDatetime?: Date): Observable<GetEventResponse> {
+  getEvents(keyword: string | null, location: string | null, startDatetime: Date | null, endDatetime: Date | null): Observable<GetEventResponse> {
     // Ticketmaster API requires size and page parameters
     // I'd normally set up a pagination component to allow the user to select the page and amount of results they want to view
     // For the purposes of this exercise, I'm just hardcoding them
@@ -27,12 +27,18 @@ export class EventService {
     const page = 1;
     let params = new HttpParams();
     params = params.append('apikey', this.apiKey);
-    params = params.append('keyword', keyword);
-    params = params.append('latlong', location);
+    if (keyword) {
+      params = params.append('keyword', keyword);
+    }
+    if (location) {
+      params = params.append('latlong', location);
+    }
     // Ticketmaster API requires ISO 8601 format, but the Date.toISOString() method returns a string in a slightly different format
     // The slice(0, -5) removes the last 5 characters (the milliseconds and the 'Z' at the end)
     // It's not the most elegant solution, but it works given the time constraints
-    params = params.append('startDateTime', startDatetime.toISOString().slice(0, -5) + 'Z');
+    if (startDatetime) {
+      params = params.append('startDateTime', startDatetime.toISOString().slice(0, -5) + 'Z');
+    }
     if (endDatetime) {
       params = params.append('endDateTime', endDatetime.toISOString().slice(0, -5) + 'Z');
     }
@@ -41,13 +47,15 @@ export class EventService {
 
     return this.http.get<GetEventResponse>(this.apiUrl, { params }).pipe(
       map(response => {
-        this.eventsSubject.next(response._embedded.events);
+        // Very basic error handling for this exercise
+        catchError(throwError => throwError)
+        this.eventsSubject.next(response);
         return response;
-      })
+      }),
     );
   }
 
-  getEventsSubject(): Observable<TicketmasterEvent[]> {
+  getEventsSubject(): Observable<GetEventResponse> {
     return this.eventsSubject.asObservable();
   }
 }

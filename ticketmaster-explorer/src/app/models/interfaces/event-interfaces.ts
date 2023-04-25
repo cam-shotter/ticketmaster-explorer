@@ -1,10 +1,31 @@
+interface Image {
+  url: string
+}
+
+interface Dates {
+  start: {
+    localDate: string,
+    localTime: string,
+  },
+}
+
+interface Venue {
+  name: string,
+  address: {
+    line1: string,
+  },
+}
 export interface TicketmasterEvent {
   name: string,
-  type: string,
   id: string,
-  test: boolean,
   url: string,
   locale: string,
+  images: Image[],
+  dates: Dates,
+  _links: Links,
+  _embedded: {
+    venues: Venue[],
+  },
 }
 
 export interface Links {
@@ -34,5 +55,5 @@ export interface GetEventResponse {
     events: TicketmasterEvent[],
   },
   page: Page,
-  _links: LinkStyle,
+  _links: Links,
 }
